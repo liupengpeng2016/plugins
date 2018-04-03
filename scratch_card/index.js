@@ -8,6 +8,8 @@
   wipePercent: ,//0-100,擦除百分比
   callbackAfterWipe: ''//擦除完成回调函数
 }
+实例方法
+init //重置画布
 */
 function Scratch_card(params) {
     this.params = params;
@@ -22,8 +24,20 @@ Scratch_card.prototype = {
     this.operateObj = target.getContext('2d');
     target.style.width = width;
     target.style.height = height;
-    this.operateObj.fillStyle = this.params.coating ? this.params.coating : '#aaa';
-    this.operateObj.fillRect(0,0,parseInt(width), parseInt(height));
+    var style;
+    if (this.params.coating.search(/(\.png)|(\.jpg)|(\.gif)/) !== -1) {
+      var img = document.createElement('img')
+      img.onload = function () {
+        style = this.operateObj.createPattern()
+        this.operateObj.fillStyle = style
+        this.operateObj.fillRect(0,0,parseInt(width), parseInt(height));
+      }
+      img.src = this.params.coating
+    } else {
+      style = this.params.coating ? this.params.coating : '#aaa';
+      this.operateObj.fillStyle = style
+      this.operateObj.fillRect(0,0,parseInt(width), parseInt(height));
+    }
     //添加事件监听
     target.addEventListener('touchmove', this.moveHandler.bind(this), this.isPassiveSupported() ? {passive: false} : false);
     target.addEventListener('touchend', this.moveEndHandler.bind(this), this.isPassiveSupported() ? {passive: false} : false);
