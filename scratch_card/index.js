@@ -3,7 +3,7 @@
   target:'',//selector 目标canvas
   width: '',//带单位,默认300px
   height: '',//带单位，默认150px
-  coatingColor:'',//图层颜色，默认#aaa
+  coating:'',//图层颜色或图层图片，默认#aaa
   wipeRadius: ''//带单位，默认20px
   wipePercent: ,//0-100,擦除百分比
   callbackAfterWipe: ''//擦除完成回调函数
@@ -22,7 +22,7 @@ Scratch_card.prototype = {
     this.operateObj = target.getContext('2d');
     target.style.width = width;
     target.style.height = height;
-    this.operateObj.fillStyle = this.params.coatingColor ? this.params.coatingColor : '#aaa';
+    this.operateObj.fillStyle = this.params.coating ? this.params.coating : '#aaa';
     this.operateObj.fillRect(0,0,parseInt(width), parseInt(height));
     //添加事件监听
     target.addEventListener('touchmove', this.moveHandler.bind(this), this.isPassiveSupported() ? {passive: false} : false);
@@ -42,7 +42,7 @@ Scratch_card.prototype = {
     return passiveSupported;
   },
   getOffset: function(target) {
-    if(target.nodeName === 'BODY') {
+    if(target === null) {
       return {
         top: 0,
         left: 0,
