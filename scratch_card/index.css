@@ -1,0 +1,21 @@
+.scratchCard-container{
+  position:relative;
+  width:100%;
+  height: 200px;
+  overflow: hidden;
+  z-index: 0;
+}
+.scratchCard-canvas{
+  width:100%;
+  height:100%;
+  top:0;
+}
+.scratchCard-coating{
+  position:absolute;
+  z-index: -10;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  visibility: hidden;
+}
