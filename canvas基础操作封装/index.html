@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+    #test{
+      width:300px;
+      height:200px;
+      border:1px solid;
+      margin:30px auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="test"></div>
+  <script src='./canvas.js'></script>
+  <script>
+    var canv = new SAUC({id: 'test', isScale: true, UIW: 0})
+    var image = canv.create({
+      type: 'image',
+      params: ['http://pic1.nipic.com/2008-12-30/200812308231244_2.jpg', 30, 30, 250, 150]
+    })
+    var rect = canv.create({
+      type: 'rect',
+      params: [100, 100, 50, 50, 'yellow']
+    })
+    var arc = canv.create({
+      type: 'arc',
+      params: [200, 100, 50, 0, Math.PI * 2, 'green']
+    })
+    var solidline = canv.create({
+      type: 'line',
+      params: [20, 20, 60, 60, 'red', 2]
+    })
+    var dashline = canv.create({
+      type: 'dashline',
+      params: [[5, 5], 100, 200, 50, 50, 'yellow']
+    })
+
+  </script>
+</body>
+</html>
