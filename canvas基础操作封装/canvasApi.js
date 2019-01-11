@@ -1,16 +1,17 @@
-(function () {
-  class SAUC {
-    constructor ({id, isScale, UIW}) {
-      this.init(id) // 初始化画布
+  class Ca {
+    constructor ({target, isScale, unit}) {
+      this.init(target) // 初始化画布
       this.isScale = isScale // 是否按设备大小缩放
-      this.UIW = UIW || window.innerWidth // 设计稿宽度
+      this.unit = unit || document.documentElement.clientWidth // 设计稿宽度
     }
-    init (id) {
-      const container = document.querySelector('#' + id)
-      const containerSize = this.containerSize = {width: container.clientWidth, height: container.clientHeight}
-      container.innerHTML = `<canvas width=${containerSize.width} height=${containerSize.height}>抱歉，该设备不支持！</canvas>`
+    init (target) {
+      const container = typeof target === 'string' ? document.querySelector('#' + target) : target
+      const dpr = window.devicePixelRatio
+      const containerSize = this.containerSize = {width: container.clientWidth * dpr, height: container.clientHeight * dpr}
+      container.innerHTML = `<canvas width=${containerSize.width} height=${containerSize.height} style='width:100%;height:100%'>抱歉，该设备不支持！</canvas>`
       this.ctx = container.firstElementChild.getContext('2d')
       this.renderList = []
+      
       window.requestAnimationFrame = requestAnimationFrame ||
         webkitRequestAnimationFrame ||
         mozRequestAnimationFrame ||
@@ -20,7 +21,7 @@
     }
     create ({type, params}) {
       const el = {
-        type, // type类型： 'line', 'dashline', 'rect', 'image', arc
+        type, // type类型： 'line', 'dashline', 'rect', 'image', arc, font
         params
       }
       if (type === 'image') {
@@ -36,7 +37,7 @@
       return el
     }
     lineGenerator (params = []) {
-      const [x1 = 0, y1 = 0, x2 = 0, y2 = 0, s = 'black', w = '1'] = params.map(val => this.turnUnit(val)) // 起点横坐标，起点纵坐标，终点横坐标，终点纵坐标，颜色，宽度
+      const [x1 = 0, y1 = 0, x2 = 0, y2 = 0, s = 'black', w = 1] = params.map(val => this.turnUnit(val)) // 起点横坐标，起点纵坐标，终点横坐标，终点纵坐标，颜色，宽度
       this.ctx.beginPath()
       this.ctx.moveTo(x1, y1)
       this.ctx.lineTo(x2, y2)
@@ -64,15 +65,22 @@
       this.ctx.fill()
     }
     imageGenerator (params) {
-      const [image, x, y, w, h] = params.map(val => this.turnUnit(val)) // 图片， 水平， 数值， 宽， 高
+      const [image, x, y, w, h] = params.map(val => this.turnUnit(val)) // 图片， 水平， 竖直， 宽， 高
       if (image) {
         this.ctx.drawImage(image, x, y, w, h)
       }
     }
+    fontGenerator (params) {
+      const [txt, x, y, size, c, base, isBold, family, maxW] = params.map((val, i) => i > 0 ? this.turnUnit(val) : val) // 文字，水平，竖直
+      this.ctx.font = (isBold ? 'bold ' : '') + size + 'px ' + family
+      this.ctx.fillStyle = c
+      this.ctx.textAlign = base
+      this.ctx.fillText(txt, x, y, maxW)
+    }
     turnUnit (px) {
       let result = px
       if (this.isScale && typeof px === 'number') {
-        result = window.innerWidth / this.UIW * px
+        result = Math.max(document.documentElement.clientWidth / this.unit * px * window.devicePixelRatio, 1)
       }
       return result
     }
@@ -92,5 +100,4 @@
       })
     }
   }
-  typeof exports === 'undefined' ? window.SAUC = SAUC : module.exports = SAUC
-})()
+export default Ca
