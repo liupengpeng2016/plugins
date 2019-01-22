@@ -3,7 +3,7 @@
     window.console.log = window.console.error = function () {}
   }
   function Scrollbar (params) {
-    /*
+    /* 参数格式
       {
       target: idstr / dom
     }

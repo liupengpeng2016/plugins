@@ -1,8 +1,9 @@
   class Ca {
-    constructor ({target, isScale, unit}) {
-      this.init(target) // 初始化画布
+    constructor ({target, isScale, unit, isAutoRender = true}) {
       this.isScale = isScale // 是否按设备大小缩放
       this.unit = unit || document.documentElement.clientWidth // 设计稿宽度
+      this.isAutoRender = isAutoRender // 是否自动重复渲染，false时调用this.render()手动渲染
+      this.init(target) // 初始化画布
     }
     init (target) {
       const container = typeof target === 'string' ? document.querySelector('#' + target) : target
@@ -17,7 +18,9 @@
         mozRequestAnimationFrame ||
         msRequestAnimationFrame ||
         function (fn) {setTimeout(fn, 1000 / 60)}
-      this.render()
+      if (this.isAutoRender) {
+        this.render(true)
+      }
     }
     create ({type, params}) {
       const el = {
@@ -30,6 +33,11 @@
           img = new Image()
           img.src = params[0]
           el.params[0] = img
+          img.onload = () => {
+            if (!this.isAutoRender) {
+              this.render()
+            } 
+          }
         }
       }
       el.id = this.renderList.length
@@ -71,11 +79,12 @@
       }
     }
     fontGenerator (params) {
-      const [txt, x, y, size, c, base, isBold, family, maxW] = params.map((val, i) => i > 0 ? this.turnUnit(val) : val) // 文字，水平，竖直
+      const [txt, x, y, size, c, base, isBold, family = 'Arial'] = params.map((val, i) => i > 0 ? this.turnUnit(val) : val) // 文字，水平，竖直
       this.ctx.font = (isBold ? 'bold ' : '') + size + 'px ' + family
       this.ctx.fillStyle = c
       this.ctx.textAlign = base
-      this.ctx.fillText(txt, x, y, maxW)
+      this.ctx.fillText(txt, x, y)
+
     }
     turnUnit (px) {
       let result = px
@@ -84,14 +93,19 @@
       }
       return result
     }
-    render () {
+    clear () {
+      this.renderList = []
+    }
+    render (isKeep) {
       this.ctx.clearRect(0, 0, this.containerSize.width, this.containerSize.height)
       this.renderList.forEach((val, i) => {
         this.ctx.save()
         this[val.type + 'Generator'](val.params)
         this.ctx.restore()
       })
-      window.requestAnimationFrame(this.render.bind(this))
+      if (isKeep) {
+        window.requestAnimationFrame(this.render.bind(this, true))
+      }
     }
     remove (item) {
       this.renderList.splice(item.id, 1)
