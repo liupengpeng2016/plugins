@@ -1,6 +1,6 @@
   class Ca {
     constructor ({target, isScale, unit, isAutoRender = true}) {
-      this.isScale = isScale // 是否按设备大小缩放
+      this.isScale = isScale // 是否按设备大小缩放,用于移动端自适应
       this.unit = unit || document.documentElement.clientWidth // 设计稿宽度
       this.isAutoRender = isAutoRender // 是否自动重复渲染，false时调用this.render()手动渲染
       this.init(target) // 初始化画布

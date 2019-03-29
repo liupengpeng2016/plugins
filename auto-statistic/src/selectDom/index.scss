@@ -1,0 +1,32 @@
+// .menu-20190327{
+//   position: fixed;
+//   width:100%;
+//   height:100%;
+//   top:0;
+//   left:0;
+//   background:rgba(0,0,0,0.6);
+//   z-index: 1000;
+//   >span{
+//     position: absolute;
+//     background:white;
+//     line-height: 30px;
+//     font-size:18px;
+//     text-align: center;
+//   }
+// }
+.mark-20190327{
+  outline: 2px solid red;
+}
+.dom-mask{
+  position: relative;
+  &:after{
+    content: '';
+    position: absolute;
+    background:rgba(0,0,0,0.6);
+    z-index: 1000;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+  }
+}

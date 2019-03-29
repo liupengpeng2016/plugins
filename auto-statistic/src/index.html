@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .father {
+      width:200px;
+      height:200px;
+      background:blue;
+      margin:30px;
+    }
+    .cover {
+      position:fixed;
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      background:rgba(0,0,0,0.6);
+      display:none;
+    }
+    .son{
+      width:100px;
+      height:100px;
+      background:yellow;
+    }
+    iframe{
+      border: 1px solid;
+    }
+  </style>
+  <script>
+      var _dgt = _dgt || [];
+      window._dgt = _dgt;
+      (function () {
+        _dgt.push(['setSiteId', 'e29fcabab01c99c3']);
+        var d = document, g = d.createElement('script'),
+        s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript'; g.async = true;
+        g.defer = true;
+        g.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 't.shujike.com/dgt.js';
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+</head>
+<body>
+    <div class="father">
+        <div class='son'>
+        </div>
+      </div>
+      <div class="father">
+          <div class='son'>
+          </div>
+        </div>
+            <script>
+    window.addEventListener('message', function () {
+      console.log('receive message')
+    })
+  </script>
+</body>
+</html>
